@@ -1,0 +1,284 @@
+\documentclass[unicode,11pt,a4paper,oneside,numbers=endperiod,openany]{scrartcl}
+
+\input{assignment.sty}
+
+\begin{document}
+
+
+\setassignment
+\setduedate{11 March 2024, 23:59}
+
+\serieheader{High-Performance Computing Lab for CSE}{2024}
+            {Student: Yannick Ramic}
+            {Discussed with: FULL NAME}{Solution for Project 1}{}
+\newline
+
+\assignmentpolicy
+
+\section{Euler warm-up [10 points]}
+This answers come from the documentation website, hence I won't cite anything properly.
+\subsection{What is the module system and how do you use it?}
+While working on the cluster it's necessary to use software or work with programming
+languages like C++ or Python. To make use of the cluster and use it's potential to work
+with accelerated GPU and CPU, these dependencies need to be actually installed on the 
+cluster. Thus, to configure the desired environment with a prefered software version, the
+cluster makes use of modules. For the EULER cluster, two types of modules exist. LMOD
+modules, which use a hierarchy of modules with three layers (Core -, Compiler - and MPI layer,
+according to the illustration on the documentation webpage). On the other hand, environment
+modules have the advantage to make use of pre-installed dependencies by updating the
+desired software stock. More important information, users are able to install additional
+applications in their home directory, also there are useful commands to check whether a 
+dependency is installed.
+\subsection{What is SLURM and its intended function?}
+SLURM is a workload manager for the management of compute jobs on high-performance computing 
+clusters. It's important to know that 
+users can solely use the cluster ressources through the batch system. During the lecture it
+was made clear that for each job submitted we need ro make a request at the cluster,
+which is done by the described batch system! Thus a job submission command consists of three
+parts:
+\begin{enumerate}
+    \item sbatch (SLURM submit command)
+    \item SLURM options (requesting resources and job-related options)
+    \item Job (computing job to be submitted)
+\end{enumerate}
+To summarize, the intended function is to efficiently delegate and utilize computing resources.
+Further information about how to submit a job, a parallel job, a GPU job, as well as, how to 
+monitor a job and see the job output can be found on the EULER cluster documentation online!
+\subsection{Write a simple "Hello World" C/C++ program which prints the host name of the machine
+on which the program is running.}
+You can find the corresponding C++ file under the name \texttt{hello\_world.cpp}.
+\subsection{Write a batch script which runs your program on one node. The batch script should
+be able to target nodes with specific CPUs}
+The resulting files are \texttt{slurm\_job\_one-49284262.out} and \texttt{slurm\_job\_one-49284262.err}.
+\subsection{Write another batch script which runs your program on two nodes}
+The resulting files are \texttt{slurm\_job\_two-49289041.out} and \texttt{slurm\_job\_two-49289041.err}.
+
+\section{Performance characteristics [50 points]}
+
+\subsection{Peak performance}
+
+This task requires the computation of the core, CPU, node and cluster peak performance for the Euler VII (phase 1 and 2) nodes. Relevant
+information from the provided webpages can be found summarized in table \ref{tab:CPU_par}. Also from the exercise sheet we get the following
+formulas for calculating the cluster peak perfromances:
+\begin{align*}
+    P_{core} &= n_{super} \cdot n_{FMA} \cdot n_{SIMD} \cdot f \\
+    P_{CPU} &= n_{core} \cdot P_{core} \\
+    P_{node} &= n_{sockets} \cdot P_{CPU} \\
+    P_{cluster} &= n_{node} \cdot P_{node}
+\end{align*}
+
+In addition I want to note a few things. The value from $n_{SIMD}$ comes from the fact that both AMD processors support AVX2 SIMD instructions
+with 256-bit wide vector registers. Since we are dealing with double-precision FP numbers the size of the vector register needs to be divided
+by 64 bits, this will result in the $n_{SIMD}$ value. Also from the given optimization manual for each processor unit we have to get the information
+if FMA (Floating Multiply Add) is provided. Since both processors support FMA, the fused multiply-add factor $n_{FMA}$ = 2 otherwise it would just be 1
+and the multiplication and addition can't happen in a single operation. f is the base clock frequency and key characteristic of each CPU. In addition,
+it should be mentioned that a good approximation for the duration of one clock cycle is given by 1/f. This number helps measuring the execution time
+of instructions. 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lrr}
+      \hline
+      Parameter & Phase 1 & Phase 2 \\
+      \hline
+      $n_{nodes}$ & 292 & 248\\
+      $n_{sockets}$ & 2 & 2\\
+      $n_{cores}$ & 64 & 64\\
+      $n_{super}$ & 2 & 2\\
+      $n_{FMA}$ & 2 & 2\\
+      $n_{SIMD}$ & 4 & 4\\
+      f in [GHz] & 2,6 & 2.45\\
+      \hline
+    \end{tabular}
+    \caption{CPU Parameter}
+    \label{tab:CPU_par}
+  \end{table}
+
+From table \ref{tab:CPU_par} we get the following theoretical values for the Euler VII Phase 1:
+\begin{align*}
+    P_{core} &= 2 \cdot 2 \cdot 4 \cdot 2.6 GHz = 41.6 GFlops/s \\
+    P_{CPU} &= 64 \cdot 41.6 GFlops/s = 2662.4 GFlops/s \\
+    P_{node} &= 2 \cdot 2662.4 GFlops/s = 5324.8 GFlopts/s \\
+    P_{Euler VII}^{(1)} &= 292 \cdot 5324.8 GFlops/s = 1554.8416 TFlops/s
+\end{align*}
+
+Analog for the Euler VII Phase 2 these are the results:
+\begin{align*}
+    P_{core} &= 2 \cdot 2 \cdot 4 \cdot 2.45 GHz = 39.2 GFlops/s \\
+    P_{CPU} &= 64 \cdot 39.2 GFlops/s = 2508.8 GFlops/s \\
+    P_{node} &= 2 \cdot 2508.8 GFlops/s = 5017.6 GFlopts/s \\
+    P_{Euler VII}^{(2)} &= 248 \cdot 5017.6 GFlops/s = 1244.3648 TFlops/s
+\end{align*}
+
+\subsection{Memory Hierarchies}
+
+The result of the command lscpu can be summarized in the following table:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+      \hline
+      \textbf{Information} & \textbf{Resulting Output} \\
+      \hline
+      Architecture & x86\_64 \\
+      CPU op-mode(s) & 32-bit, 64-bit \\
+      Byte Order & Little Endian \\
+      CPU(s) & 4 \\
+      On-line CPU(s) list & 0-3 \\
+      Thread(s) per core & 1 \\
+      Core(s) per socket & 4 \\
+      Socket(s) & 1 \\
+      NUMA node(s) & 1 \\
+      Vendor ID & GenuineIntel \\
+      CPU family & 6 \\
+      Model & 71 \\
+      Model name & Intel(R) Xeon(R) CPU E3-1284L v4 @ 2.90GHz \\
+      Stepping & 1 \\
+      CPU MHz & 1403.802 \\
+      CPU max MHz & 3800.0000 \\
+      CPU min MHz & 800.0000 \\
+      BogoMIPS & 5799.77 \\
+      Virtualization & VT-x \\
+      L1d cache & 32K \\
+      L1i cache & 32K \\
+      L2 cache & 256K \\
+      L3 cache & 6144K \\
+      L4 cache & 131072K \\
+      NUMA node0 CPU(s) & 0-3 \\
+      \hline
+    \end{tabular}
+    \caption{Result of the command \$ lscpu}
+    \label{tab:lscpu}
+\end{table}
+
+The total available main memory with the command cat /proc/meminfo 
+is:
+\begin{align*}
+    MemoryTotal = 32871604 kB
+\end{align*}
+Now we want to gain information about the memory hierarchy, which can be achieved by the
+following command \$ hwloc-ls --whole-system --no-io the result is the same as depicted in the exercise sheet.
+In the end I want to obtain the figure and all necessary commands are described as well in the exercise sheet.
+The resulting hierarchy is depicted in figure
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/XEON_E3-1284L.pdf}
+    \caption{Schematic of an Euler login node with an Intel(R) Xeon(R) CPU E3-1248L v4 \@ 2.90GHz.}
+    \label{fig:memory_euler}
+  \end{figure}
+
+While the setup for the Intel(R) Xeon(R) CPU E3-1248L v4 \@ 2.90GHz is rather simple, lets summarize the result
+from Figure \ref{fig:memory_euler_7H12} and \ref{fig:memory_euler_7763} in the following Table.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|}
+    %   \hline
+        & \textbf{AMD EPYC 7H12} & \textbf{AMD EPYC 7763} \\
+      \hline
+      Main memory & 31 GB & 31 GB \\
+      \hline
+      L3 cache & 16 MB & 32 MB \\
+      \hline
+      L2 cache & 512 KB & 512 KB \\
+      \hline
+      L1 cache & 32 KB & 32 KB \\
+      \hline
+    \end{tabular}
+    \caption{This table summarizes the information of one node for the underlying processor memory hierarchy.}
+    \label{tab:summary_memory}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/AMD_EPYC_7H12.pdf}
+    \caption{Schematic of an Euler login node with an AMD EPYC 7H12 CPU.}
+    \label{fig:memory_euler_7H12}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/AMD_EPYC_7763.pdf}
+    \caption{Schematic of an Euler login node with an AMD EPYC 7763 CPU.}
+    \label{fig:memory_euler_7763}
+\end{figure}
+
+\subsection{Bandwidth: STREAM benchmark}
+
+For the STREAM benchmark we can use the provided file \texttt{stream.c}, where we need to adjust the STREAM\_ARRAY\_SIZE Parameter
+in the C-file for our system. In particular our two systems are, the Euler VII Phase 1 with the AMD EPYC 7H12 CPU and for Euler VII Phase 2
+with the AMD EPYC 7763 CPU. According to the \texttt{stream.c} file provided by "Dr. Bandwidth", we have to calculate the STREAM\_ARRAY\_SIZE
+by considering the following two criteria.
+\begin{enumerate}
+    \item {The first criteria is that each array must be at least 4 times the size of the available cache memory. Note that it is important to considering
+           from Figures \ref{fig:memory_euler_7H12} and \ref{fig:memory_euler_7763} only one node.}
+    \item {The size should be large enough so that the 'timing calibration' output by the program is at least 20 clock-ticks. Furthermore, 
+    according to \texttt{stream.c} most versions of Windows have a 10 millisecond timer granularity. This assumption doesn't hold true for the euler
+    cluster!}
+\end{enumerate}
+Retrieving the results from the previous task, namely Table\ref{tab:summary_memory}, we can see that we get for Euler VII Phase 1 the following results:
+\begin{align*}
+    \bar{L1} &= 4 \cdot 32 KB = 128 KB \\
+    \bar{L2} &= 4 \cdot 512 KB = 2.048 MB \\
+    \bar{L3} &= 4 \cdot 16 MB = 64 MB .
+\end{align*}
+While we would get for Euler VII Phase 2 these results:
+\begin{align*}
+    \bar{L1} &= 4 \cdot 32 KB = 128 KB \\
+    \bar{L2} &= 4 \cdot 512 KB = 2.048 MB \\
+    \bar{L3} &= 4 \cdot 32 MB = 128 MB .
+\end{align*}
+By respecting the second criteria the chosen parameter values can be extracted from Figure \ref{fig:slurm_euler_1} and \ref{fig:slurm_euler_2}.
+\begin{figure}[H]
+    \centering
+    \VerbatimInput{slurm-euler_phase_1.txt}
+    \caption{STREAM benchmark result for Euler VII Phase 1}
+    \label{fig:slurm_euler_1}
+\end{figure}
+As done in the exercise sheet for a rough estimate we can assume for the Euler VII Phase 1 a maximum bandwidth $b_{STREAM}$ = 17 GB/s, which corresponds to the scale function.
+Same thing is possible where the Euler VII Phase 2, where we can retrieve from Figure \ref{fig:slurm_euler_2} a maximum bandwidth value of $b_{STREAM}$ = 27 GB/s, which corresponds
+to the add function.
+\begin{figure}[H]
+    \centering
+    {\fontsize{8}{10}\selectfont
+    \VerbatimInput{slurm-euler_phase_2.txt}}
+    \caption{STREAM benchmark result for Euler VII Phase 2}
+    \label{fig:slurm_euler_2}
+\end{figure}
+
+\subsection{Performance model: A simple roofline model}
+
+As a result, the last question is to answer, at what operational intensity is a kernel or application memory/compute-bound? To 
+answer this question the provided paper by Williams et al. demonstrates the roofline model, which can be described as a 
+visual performance model, that can help in order to optimize code and software for floating point computations. Furthermore, 
+the proposed model combines three important computer metrics which were already computed in the prior tasks. Parameters included
+are, the floating point performance, the operational intensity and the memory performance. The resulting 2D graph then consists
+of the following two parts:
+\begin{enumerate}
+    \item Horizontal line: represents the peak floating point performance of the core.
+    \item Linear line: represents the peak memory bandwidth.
+\end{enumerate}
+Moreover, the intersection between the two lines results in a point, which describes the limits for the underlying 
+system. As a result to determine at what operational intensity a kernel or application is memory-bound or compute-bound,
+we have to look at where the performance of the kernel intersects (the described critical point) with the memory
+bandwidth line on the graph. Hence, on one hand, if the kernel's performance is below this line, it's liekly memory-bound. 
+On the other hand, if it's above the line it's compute-bound.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/performance.png}
+    \caption{Simple roofline model for a single Euler VII Phase 1 and Phase 2 core.}
+    \label{fig:performance}
+\end{figure}
+As a result if we look at Figure \ref{fig:performance}, it is clear that the kernel or application is memory-bound at 
+operational intensity I values below 3.2 and 1.9 for the Euler VII Phase 1 and 2 core respectively. If values are above
+this critical point the kernel and application is compute-bound. \\ \\
+Note that on the next page the solution for the Project 1b starts.
+
+\newpage
+\section{Auto-vectorization [10 points]}
+
+\section{Matrix multiplication optimization [30 points]}
+
+
+\end{document}
