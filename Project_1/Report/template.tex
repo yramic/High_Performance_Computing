@@ -10,7 +10,7 @@
 
 \serieheader{High-Performance Computing Lab for CSE}{2024}
             {Student: Yannick Ramic}
-            {Discussed with: FULL NAME}{Solution for Project 1}{}
+            {Discussed with: Patrick Dowd, Carla Zurita, Arsh Kumbhat}{Solution for Project 1}{}
 \newline
 
 \assignmentpolicy
@@ -231,7 +231,7 @@ While we would get for Euler VII Phase 2 these results:
 By respecting the second criteria the chosen parameter values can be extracted from Figure \ref{fig:slurm_euler_1} and \ref{fig:slurm_euler_2}.
 \begin{figure}[H]
     \centering
-    \VerbatimInput{slurm-euler_phase_1.txt}
+    \VerbatimInput{Data_Output/slurm-euler_phase_1.txt}
     \caption{STREAM benchmark result for Euler VII Phase 1}
     \label{fig:slurm_euler_1}
 \end{figure}
@@ -241,7 +241,7 @@ to the add function.
 \begin{figure}[H]
     \centering
     {\fontsize{8}{10}\selectfont
-    \VerbatimInput{slurm-euler_phase_2.txt}}
+    \VerbatimInput{Data_Output/slurm-euler_phase_2.txt}}
     \caption{STREAM benchmark result for Euler VII Phase 2}
     \label{fig:slurm_euler_2}
 \end{figure}
@@ -279,16 +279,192 @@ Note that on the next page the solution for the Project 1b starts.
 \section{Auto-vectorization [10 points]}
 
 \subsection{Why is it important for data structures to be aligned?}
+From the Intel Compiler Guide \cite{autovectorization} we can extract the information that data 
+structure alignment is the adjustment of any data object with relation to other objects. This alignment 
+offers the opportunity to speed up memory access. As a result, it's important to know that misaligned memory accesss 
+can result in performance losses. Hence data structures have to bused in order to store data on a computer so that it can be used efficiently!
 
 \subsection{What are some obstacles that can prevent automatic vectorization by the compiler?}
+Again in the Intel Compiler Guide \cite{autovectorization}, it's mentioned that in the following cases the compiler decides that 
+vectorization would not be worthwhile.
+\begin{itemize}
+    \item {\textbf{Non-contiguous memory access:} if 4 consecutive integers, floats, or 2 consecutive doubles are not adjacent, 
+    they must be loaded separately using multiple instructions, which is considerably less efficient.}
+    \item {\textbf{Data dependencies:} Vectorization results in changes in the order of operations within a loop. This is only possible, 
+    if this change of order doesn't change the results of the calculation.}
+\end{itemize}
 
 \subsection{Is there a way to help the compiler to vectorize and how?}
+When there is insufficient information for the compiler to decide to vectorize a loop, the following ways presents a solution 
+how the compiler is able to vectorize a given problem with additional information \cite{autovectorization}.
+\begin{itemize}
+    \item {\textbf{Pragmas}}
+    \item {\textbf{Keywords:} The restrict keword for instance can help the compiler to asswert that the memory referenced by a pointer 
+    is not aliased.}
+    \item {\textbf{Options/Switches:} enables different levels of optimizations to achieve automatic vectorization.}
+\end{itemize}
 
 \subsection{Which loop optimizations are performed by the compiler to vectorize and pipeline loops?}
+These loop optimizations are typically performed by the compiler:
+\begin{itemize}
+    \item {\textbf{Stop-mining and Cleanup:} Strip-mining also known as loop sectioning is a loop transformation technique for enabling SIMD-encoding 
+    of loops. This improves memory performance. Another possibility in this context is loop blocking.}
+    \item {\textbf{Loop Interchange and Subscripts with Matrix Multiply:} This improves memory the memory access patterns. The result of this method can be 
+    seen especially in the next task to optimize the DGEMM.}
+\end{itemize}
 
 \subsection{What can be done if automatic vectorization by the compiler fails or is sub-optimal?}
+There are different ways to solve this problem, as illustrated in the following points.
+\begin{itemize}
+    \item {\textbf{Manual Vectorization:} As done in the following DGEMM example code can be rewritten to explicitly use vectorization instructions.}
+    \item {\textbf{Loop Unrolling:} This can also be done manually and reduce loop overhead.}
+    \item {\textbf{Pragma Directives:} Further pramga directives such as \#pragma omp simd.}
+    \item {\textbf{Keywords:} Additional keywords like restrict.}
+    \item {\textbf{Compiler Flags:} Additional or more aggresive compiler optimization flags can resolve this problem.}
+    \item {\textbf{Profiling:} Analysis of the generated assembly code to identify bottlenecks and areas of improvement.}
+    \item {\textbf{Software Pipelining:} This technique allows overlapping of loop iterations and improve vectorization.}
+\end{itemize}
+Which one of the mentioned approaches actually helps, depends ont the specific code and architecture. It could be seen from the next example the optimization of the DGEMM problem. 
+It becomes evident that not all of the mentioned optimization techniques to assure vectorization help.
 
 \section{Matrix multiplication optimization [30 points]}
+The goal of this task is to optimize the naive matrix multiplication through replacing it with a 
+blocking optimization. Also for further optimization its performance, we should consider various
+additional strategies. In this part of the report I will present the evolution of how I reached 
+better results through trying out different optimization strategies.
+\newline
+I started off by looking at the initial output first, without any optimization and only the comparison between 
+the DGEMM (Double Precision GEneral Matrix Multiplication) implementation of the BLAS library, which is highly 
+optimized and the naive matrix multiplication. The result can be seen in the Figure \ref{fig:no_opt}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/timing_without_opt.pdf}
+    \caption{Results of the DGEMM without any optimization.}
+    \label{fig:no_opt}
+\end{figure}
+
+From this image, it's evident, as described in the exercise sheet that there is a huge optimization potential with the 
+goal to come as close as possible to the BLAS implementation. First step I did to improve the results was to add optimization 
+flags to push the results of the naive approach a little closer.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/timing_compiler_opt.pdf}
+    \caption{Results of the DGEMM with compiler optimization.}
+    \label{fig:compiler_opt}
+\end{figure}
+As a result, Figure \ref{fig:compiler_opt} shows that just by adding some compiler flags can improve the results dramastically.
+I will briefly summarize the utilized compiler flags:
+\begin{itemize}
+    \item {\textbf{-03}: This flag represents the optimization level, where I used an aggressive approach that even outperforms
+            -Ofast.} 
+    \item \textbf{-march=native}: This gives the compiler the instruction to generate code for the host machine's architecture.
+    \item \textbf{-funroll-loops}: This compiler flag enables loop unrolling.
+\end{itemize}
+It becomes evident from Figure \ref{fig:compiler_opt} that only these few flags have a huge effect on the overall performance of 
+the DGEMM task. A compiler optimization guide provided specifically for the used AMD EPYC processor series offers more insights 
+in how to tune a GNU compiler for even more optimized results \cite{compiler_opt_guide}, \cite{compiler_best_practice}. In \cite{compiler_best_practice} 
+the suggested compiler flags for a GNU compiler area as follows:
+\begin{align*}
+    OPT &= -O3 -march=znver1 -mtune=znver1 -mfma \\
+        &\quad -mavx2 -m3dnow -fomit-frame-pointer
+\end{align*}
+This should lead to a god optimized result and in the end should generate optimal code for the 
+AMD EPYC processor \cite{compiler_best_practice}. Unfortunatelly this wasn't the case for me, 
+I think it is due to \#pragma intrinsicts that should have been placed more properly to make use of 
+SIMD. That's why I used the following compiler flags, as already presented:
+\begin{align*}
+    OPT = -O3 -march=native -funroll-loops
+\end{align*}
+Also to mention just a few, I tried other compiler flags such as -ftree-vectorize -fopt-info-vec to further 
+optimize DGEMM, but couldn't reach better results. A list of all possible compiler intrinsics for the underlying 
+AMD EPYC processor can be found on Microsoft's webpage \cite{intrisic_list}.
+\newline
+In the next approach, since in the exercise sheet it was stated that the provided template uses the column major order storage 
+scheme, I looked at the naive code closer and found that the loop hierarchy could be handled better. Through changing it I reached 
+the following results, illustrated in Figure \ref{fig:naive}. Note that all compiler optimization described from before are 
+utilized for all the following explanations.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Images/timing_NAIVE.pdf}
+    \caption{Results of the DGEMM with a loop rearrangement.}
+    \label{fig:naive}
+\end{figure}
+From the image it's evident that rearranging the order of the loops has a huge impact on the overall performance since we can utilize 
+a unity stride in a better way, as explained in the previous chapter where the concept of vectorization was discussed. Note that the underlying 
+output files can be found in the Appendix of this chapter. From 
+Figure \ref{fig:best} we can see that the average percentage of the peak performance is around 27,38\%. In comparison the so far 
+best possible result, the BLAS library, has according to Figure \ref{fig:blas} an average percentage of the peak performance around 102,02\%. 
+Unfortunatelly, this was already my best result I could achieve.
+\newline
+Nevertheless I will present further optimization trials. Since the main task was to implement a blocked matrix DGEMM approach, I briefly 
+want to adress this task as well. The resulting code for this task can be found in the \texttt{dgemm-blocked.c}, where both versions, 
+my optimized naive approach as well as the tiled matrix DGEMM are available. From the exercise sheet it becomes evident that for this approach 
+we need a block size to split the problem up and this size actually depends on the underlying processor architecture. From previous tasks 
+we know that we want to store frequently used data inside the L1 cache, as close as possible to the CPU. The memory capacity of the L1 
+cache for the AMD EPYC 7763 processor is 32KB, we can utilize the conversion that 1KB = 2024 Bytes and get in the end the following result
+for an upper bound of the block size:
+\begin{align*}
+    s \leq \sqrt{\frac{32 \cdot 1024}{3 \cdot 8}} = 36 
+\end{align*}
+The product of $32 \cdot 1024$ has to be divided through $3 \cdot 8$ this is the case because the size of a double precision floating point 
+is 8 Bytes. Also, as stated and explained in the exercise sheet s should be as large as possible to gain best results so in this case, 
+the best result for the matrix blocking should be with a blocking size of 36. But since this is only a theoretical upper bound there is still 
+some adjustment necessary. In my case, as evident from Figure \ref{fig:blocked}, I got the best results with a block size value of 26 instead of 36.
+\newline
+Initially, I had an average percentage of the peak performance around 22\%. Through further pragma directives I was able to tweak it at least up 
+to a value of 24,66\%. The most important one is \#pragma unroll which tells the compiler to unroll the following loop. Another used pragma directive 
+is \#pragma omp atomic, which helped eventhough there was no multithreading involved. For some strange reason also the second used pragma directive 
+is just for parallel computation, but it still improved my results a bit, which doesn't make any sense to be honest. \#pragma omp parallel for collapse(2)
+enables parallelization across the following two loop dimensions for improved performance in a parallel computing environment. Also I want to mention 
+another rather strange observation if the block size was defined with a preprocessor directive, more specifically the macro named BLOCK\_SIZE, instead of
+initializing it with an integer, the performance dropped rapidly from 24\% to 10\%. Hence I stayed with the implementation provided in the code.
+\newline
+To summarize my result briefly, eventhough I tried out all mentioned optimization techniques and did even further investigation I wasn't able 
+to tweak the tiled matrix multiplication to a better result than the naive approach.
+
+\newpage
+\subsection{Appendix}% Add to table of contents without numbering
+The following Figures \ref{fig:basic}, \ref{fig:blocked}, \ref{fig:best} and \ref{fig:blas} are the outputted results for the AMD 
+EPYC 7763 processor on the Euler cluster.
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{8}{10}\selectfont
+    \VerbatimInput{Data_Output/timing_basic_dgemm.txt}}
+    \caption{This is the result without any optimization of the basic/naive DGEMM.}
+    \label{fig:basic}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{8}{10}\selectfont
+    \VerbatimInput{Data_Output/timing_blocked_dgemm_BLOCKED.txt}}
+    \caption{This is the result of the implemented and even more optimized matrix blocking/tiling approach.}
+    \label{fig:blocked}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{8}{10}\selectfont
+    \VerbatimInput{Data_Output/timing_blocked_dgemm_NAIVE.txt}}
+    \caption{This is the result of the fine tuned and optimized naive DGEMM.}
+    \label{fig:best}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{8}{10}\selectfont
+    \VerbatimInput{Data_Output/timing_blas_dgemm.txt}}
+    \caption{This is the result of the the BLAS library for the DGEMM task.}
+    \label{fig:blas}
+\end{figure}
+
+\newpage
+% \section*{References}  % Use \section* to prevent section number
+\addcontentsline{toc}{section}{References}  % Add to table of contents without numbering
+
+\bibliographystyle{unsrt}
+\bibliography{library}
 
 \end{document}
