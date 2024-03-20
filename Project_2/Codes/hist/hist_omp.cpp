@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <omp.h>
 
 #define VEC_SIZE 1000000000
 #define BINS 16
@@ -33,9 +34,27 @@ int main() {
   }
 
   // TODO Parallelize the histogram computation
+
   time_start = walltime();
-  for (long i = 0; i < VEC_SIZE; ++i) {
-    dist[vec[i]]++;
+  // TODO Parallelize the histogram computation
+  #pragma omp parallel shared(vec, dist)
+  {
+    // For some reason dist_local has to be defined inside the omp area
+    // otherwise I will get racing issues and I end up having wrong results!
+    long dist_local[BINS];
+    for (int bin = 0; bin < BINS; ++bin) {
+      dist_local[bin] = 0;
+    }
+
+  #pragma omp for
+    for (long i = 0; i < VEC_SIZE; ++i) {
+      dist_local[vec[i]]++;
+    }
+    
+    for (int bin = 0; bin < BINS; ++bin) {
+  #pragma omp atomic
+      dist[bin] += dist_local[bin];
+    }
   }
   time_end = walltime();
 

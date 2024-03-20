@@ -39,6 +39,10 @@ int main(int argc, char **argv) {
       // >>>>>>>> CODE IS MISSING
       // x and y are treated as coordinates in an image where in reality y would be a complex number!
       // Initialize z and a counter for the number of iterations:
+      x = 0;
+      y = 0;
+      x2 = 0;
+      y2 = 0;
       do {
        x_temp = x*x - y*y + cx;
        y = 2*x*y + cy;

@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 
 # Results for the omp (total time)
 # t_omp = [1684.3, 789.63, 422.157, 190.186, 89.7582, 52.6643]
-t_omp = [331.488, 168.342, 160.61, 110.289, 62.7268, 33.6183]
+t_omp = [2.60583, 1.47105, 0.843258, 0.468622, 0.340959, 0.290979]
 
 # Number of threads
 threads = [1, 2, 4, 8, 16, 32]
 
 # Result for the sequential implementation (without omp)
-t_seq = 339.969
+t_seq = 2.65926
 
 ######################## STRONG SCALING ANALYSIS - SPEEDUP ############################
 

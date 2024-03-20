@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
   long nTotalIterationsCount = 0;
 
   long i, j, n;
+  int c;
 
   int threads = 4; // Initialize the number of threads with 1!
   if (argc > 1) threads = atol(argv[1]); // update the number of threads
@@ -28,34 +29,28 @@ int main(int argc, char **argv) {
 
   double time_start = walltime();
 
-//   #pragma omp parallel for                                            \
-//           default(none)                                               \
-//           shared(nTotalIterationsCount, pPng, fDeltaX, fDeltaY)       \
-//           private(cx, cy, x, y, x2, y2, n, x_temp)  
-  #pragma omp parallel private(cx,cy,x,y,x2,y2,n) shared(nTotalIterationsCount)
+  #pragma omp parallel private(c,cx,cy,x,y,x2,y2,n,i,j) shared(nTotalIterationsCount, fDeltaX,fDeltaY,pPng)
   {
-       // do the calculation
-       cy = MIN_Y;
   #pragma omp for
        for (j = 0; j < IMAGE_HEIGHT; j++) {
-              cx = MIN_X;
+
+              cy = MIN_Y + j*fDeltaY;
+
               for (i = 0; i < IMAGE_WIDTH; i++) {
-                     x = cx;
-                     y = cy;
-                     x2 = x * x;
-                     y2 = y * y;
+
+                     cx = MIN_X + i*fDeltaX;
+
                      // compute the orbit z, f(z), f^2(z), f^3(z), ...
                      // count the iterations until the orbit leaves the circle |z|=2.
                      // stop if the number of iterations exceeds the bound MAX_ITERS.
                      n = 0;
                      // TODO
                      // >>>>>>>> CODE IS MISSING
-                     // x and y are treated as coordinates in an image where in reality y would be a complex number!
-                     // Initialize z and a counter for the number of iterations:
+                     x = 0;
+                     y = 0;
+                     x2 = 0;
+                     y2 = 0;
                      do {
-                            cx = MIN_X + i*fDeltaX;
-                            cy = MIN_Y + j*fDeltaY;
-
                             x_temp = x*x - y*y + cx;
                             y = 2*x*y + cy;
                             x = x_temp;
@@ -71,7 +66,7 @@ int main(int argc, char **argv) {
                      // <<<<<<<< CODE IS MISSING
                      // n indicates if the point belongs to the mandelbrot set
                      // plot the number of iterations at point (i, j)
-                     int c = ((long)n * 255) / MAX_ITERS;
+                     c = ((long)n * 255) / MAX_ITERS;
                      png_plot(pPng, i, j, c, c, c);
               }
        }

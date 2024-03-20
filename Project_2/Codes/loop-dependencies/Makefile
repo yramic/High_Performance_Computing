@@ -1,4 +1,5 @@
 CC ?= gcc
+CFLAGS  = -lm
 
 all: recur_seq recur_omp
 
@@ -9,7 +10,7 @@ recur_seq.o: recur_seq.c walltime.h
 	$(CC) -c -O3 $<
 
 recur_omp: recur_omp.c walltime.o
-	$(CC) -O3 -fopenmp $^ -o $@
+	$(CC) -O3 -fopenmp $^ $(CFLAGS) -o $@
 
 recur_omp.o: recur_omp.c walltime.h
 	$(CC) -c -O3 -fopenmp $<

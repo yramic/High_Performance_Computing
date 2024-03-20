@@ -1,0 +1,17 @@
+#pragma omp parallel shared(opt) private(n)
+{
+#pragma omp for firstprivate(lastn) lastprivate(Sn)
+    for (n = 0; n <= N; ++n) {
+        if (lastn == n - 1) {
+            // Use the fast version!
+            Sn *= up;
+        } else {
+            // Use the slow version!
+            // Note that S0 = up!
+            Sn = up * pow(up, n);
+        }
+        opt[n] = Sn;
+        // Update lastn!
+        lastn = n;
+    }
+} // End OMP

@@ -16,5 +16,15 @@ module list
 make clean
 make
 
-# Run
+# Run the program without OMP:
+echo "Running the Sequential Program"
 ./hist_seq
+
+# Run the program for OMP_NUM_THREADS equal to 1, 2, 4, 8, 16, 32 -- 5
+for ((i=1; i<=2; i++))
+do
+  OMP_NUM_THREADS=$((2**i))
+  echo "Running with OMP_NUM_THREADS=$OMP_NUM_THREADS"
+  export OMP_NUM_THREADS
+  ./hist_omp
+done

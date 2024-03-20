@@ -1,62 +1,62 @@
 Mandel Serial Implementation:
-Total time:                 480.487 seconds
+Total time:                 339.969 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 113612642934
-Avg. time per pixel:        2.86392e-05 seconds
-Avg. time per iteration:    4.22917e-09 seconds
-Iterations/second:          2.36453e+08
-MFlop/s:                    1891.63
+Total number of iterations: 113624527400
+Avg. time per pixel:        2.02637e-05 seconds
+Avg. time per iteration:    2.99204e-09 seconds
+Iterations/second:          3.34221e+08
+MFlop/s:                    2673.77
 ---------------------------------------------
 Mandel Parallelized with 1 Thread:
-Total time:                 449.551 seconds
+Total time:                 331.488 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 113569015896
-Avg. time per pixel:        2.67953e-05 seconds
-Avg. time per iteration:    3.95839e-09 seconds
-Iterations/second:          2.52628e+08
-MFlop/s:                    2021.02
+Total number of iterations: 113652339001
+Avg. time per pixel:        1.97582e-05 seconds
+Avg. time per iteration:    2.91669e-09 seconds
+Iterations/second:          3.42855e+08
+MFlop/s:                    2742.84
 ---------------------------------------------
 Mandel Parallelized with 2 Threads:
-Total time:                 184.317 seconds
+Total time:                 168.342 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 87847564470
-Avg. time per pixel:        1.09861e-05 seconds
-Avg. time per iteration:    2.09814e-09 seconds
-Iterations/second:          4.76613e+08
-MFlop/s:                    3812.9
+Total number of iterations: 113652339001
+Avg. time per pixel:        1.0034e-05 seconds
+Avg. time per iteration:    1.4812e-09 seconds
+Iterations/second:          6.75128e+08
+MFlop/s:                    5401.02
 ---------------------------------------------
 Mandel Parallelized with 4 Threads:
-Total time:                 191.517 seconds
+Total time:                 160.61 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 87216117784
-Avg. time per pixel:        1.14153e-05 seconds
-Avg. time per iteration:    2.19589e-09 seconds
-Iterations/second:          4.55396e+08
-MFlop/s:                    3643.17
+Total number of iterations: 113652339001
+Avg. time per pixel:        9.57308e-06 seconds
+Avg. time per iteration:    1.41317e-09 seconds
+Iterations/second:          7.07631e+08
+MFlop/s:                    5661.05
 ---------------------------------------------
 Mandel Parallelized with 8 Threads:
-Total time:                 18.6506 seconds
+Total time:                 110.289 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 5736897619
-Avg. time per pixel:        1.11166e-06 seconds
-Avg. time per iteration:    3.25098e-09 seconds
-Iterations/second:          3.07599e+08
-MFlop/s:                    2460.79
+Total number of iterations: 113652339001
+Avg. time per pixel:        6.57374e-06 seconds
+Avg. time per iteration:    9.70408e-10 seconds
+Iterations/second:          1.03049e+09
+MFlop/s:                    8243.96
 ---------------------------------------------
 Mandel Parallelized with 16 Threads:
-Total time:                 28.9187 seconds
+Total time:                 62.7268 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 30849575488
-Avg. time per pixel:        1.72369e-06 seconds
-Avg. time per iteration:    9.37409e-10 seconds
-Iterations/second:          1.06677e+09
-MFlop/s:                    8534.16
+Total number of iterations: 113652339001
+Avg. time per pixel:        3.73881e-06 seconds
+Avg. time per iteration:    5.51918e-10 seconds
+Iterations/second:          1.81186e+09
+MFlop/s:                    14494.9
 ---------------------------------------------
 Mandel Parallelized with 32 Threads:
-Total time:                 6.3399 seconds
+Total time:                 33.6183 seconds
 Image size:                 4096 x 4096 = 16777216 Pixels
-Total number of iterations: 4694068489
-Avg. time per pixel:        3.77888e-07 seconds
-Avg. time per iteration:    1.35062e-09 seconds
-Iterations/second:          7.404e+08
-MFlop/s:                    5923.2
+Total number of iterations: 113652339001
+Avg. time per pixel:        2.00381e-06 seconds
+Avg. time per iteration:    2.958e-10 seconds
+Iterations/second:          3.38067e+09
+MFlop/s:                    27045.3
