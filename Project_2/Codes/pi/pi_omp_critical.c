@@ -16,13 +16,14 @@ int main(int argc, char *argv[]) {
   double time_tot = 0.0;
   double avg_time = 0.0;
   // To the experiment 10 times and build the average!
+  omp_set_num_threads(threads);
   for (int experiment = 0; experiment < 10; ++experiment) {
     /* Parallelize with OpenMP using the critical directive */
     time_start = walltime();
     h = 1./N;
     sum = 0.;
     // omp_set_num_threads(NUM_THREADS);
-    omp_set_num_threads(threads);
+    // omp_set_num_threads(threads);
     #pragma omp parallel
     {
       double partial_sum = 0.;

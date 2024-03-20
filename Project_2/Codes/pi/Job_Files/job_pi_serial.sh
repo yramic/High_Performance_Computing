@@ -15,11 +15,14 @@ module load gcc
 make
 
 # run (srun: run job on cluster with provided resources/allocation)
-srun ./pi_serial 1000000
-srun ./pi_serial 500000
-srun ./pi_serial 250000
-srun ./pi_serial 125000
-srun ./pi_serial 62500
+# srun ./pi_serial 1000000
+# srun ./pi_serial 2000000
+# srun ./pi_serial 4000000
+# srun ./pi_serial 8000000
+# srun ./pi_serial 16000000
+# srun ./pi_serial 32000000
+
+srun ./pi_serial 10000000
 
 # Remove the first four lines from the output file
 # It is important to make a proper make clean before running this file, otherwise there

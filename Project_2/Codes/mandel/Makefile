@@ -1,11 +1,19 @@
 CC     ?= gcc
-CFLAGS  = -O3 -I$(CPATH)
-LDFLAGS = -O3 -L$(LIBRARY_PATH) -lpng
+CFLAGS  = -O3 -fopenmp -I.
+LDFLAGS = -O3 -fopenmp -L. -lpng
 
-all: mandel_seq
+.PHONY: all clean
+
+all: mandel_omp mandel_seq
+
+mandel_omp: mandel_omp.o pngwriter.o walltime.o
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+
+mandel_omp.o: mandel_omp.c consts.h pngwriter.h walltime.h
+	$(CC) -c $(CFLAGS) $<
 
 mandel_seq: mandel_seq.o pngwriter.o walltime.o
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
 
 mandel_seq.o: mandel_seq.c consts.h pngwriter.h walltime.h
 	$(CC) -c $(CFLAGS) $<
@@ -16,6 +24,5 @@ pngwriter.o: pngwriter.c pngwriter.h
 walltime.o: walltime.c walltime.h
 	$(CC) -c $(CFLAGS) $<
 
-.PHONY: clean
 clean:
-	$(RM) *.o mandel_seq
+	$(RM) *.o mandel_omp mandel_seq

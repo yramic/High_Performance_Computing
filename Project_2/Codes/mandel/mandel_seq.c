@@ -12,14 +12,14 @@
 int main(int argc, char **argv) {
   png_data *pPng = png_create(IMAGE_WIDTH, IMAGE_HEIGHT);
 
-  double x, y, x2, y2, cx, cy;
+  double x, y, x2, y2, cx, cy, x_temp;
 
   double fDeltaX = (MAX_X - MIN_X) / (double)IMAGE_WIDTH;
   double fDeltaY = (MAX_Y - MIN_Y) / (double)IMAGE_HEIGHT;
 
   long nTotalIterationsCount = 0;
 
-  long i, j;
+  long i, j, n;
 
   double time_start = walltime();
   // do the calculation
@@ -34,9 +34,24 @@ int main(int argc, char **argv) {
       // compute the orbit z, f(z), f^2(z), f^3(z), ...
       // count the iterations until the orbit leaves the circle |z|=2.
       // stop if the number of iterations exceeds the bound MAX_ITERS.
-      int n = 0;
+      n = 0;
       // TODO
       // >>>>>>>> CODE IS MISSING
+      // x and y are treated as coordinates in an image where in reality y would be a complex number!
+      // Initialize z and a counter for the number of iterations:
+      do {
+       x_temp = x*x - y*y + cx;
+       y = 2*x*y + cy;
+       x = x_temp;
+
+       // Update x2 and y2:
+       x2 = x * x; 
+       y2 = y * y; 
+
+       n++;
+      } while ((x2 + y2 < 2*2) && n < MAX_ITERS);
+
+      nTotalIterationsCount += n;
 
       // <<<<<<<< CODE IS MISSING
       // n indicates if the point belongs to the mandelbrot set

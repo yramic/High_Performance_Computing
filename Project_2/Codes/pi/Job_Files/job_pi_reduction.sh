@@ -15,37 +15,28 @@ module load gcc
 make
 
 # run (srun: run job on cluster with provided resources/allocation)
-srun ./pi_omp_reduction 1000000 2
-srun ./pi_omp_reduction 1000000 12
-srun ./pi_omp_reduction 1000000 22
-srun ./pi_omp_reduction 1000000 32
-srun ./pi_omp_reduction 1000000 42
 
-srun ./pi_omp_reduction 500000 2
-srun ./pi_omp_reduction 500000 12
-srun ./pi_omp_reduction 500000 22
-srun ./pi_omp_reduction 500000 32
-srun ./pi_omp_reduction 500000 42
+# Weak Scaling Analysis
+# srun ./pi_omp_reduction 1000000 1
+# srun ./pi_omp_reduction 2000000 2
+# srun ./pi_omp_reduction 4000000 4
+# srun ./pi_omp_reduction 8000000 8
+# srun ./pi_omp_reduction 16000000 16
+# srun ./pi_omp_reduction 32000000 32
 
-srun ./pi_omp_reduction 250000 2
-srun ./pi_omp_reduction 250000 12
-srun ./pi_omp_reduction 250000 22
-srun ./pi_omp_reduction 250000 32
-srun ./pi_omp_reduction 250000 42
+# # Remove the first four lines from the output file
+# tail -n +8 slurm_job_pi_reduction-${SLURM_JOB_ID}.out > slurm_job_pi_reduction_weak.txt
 
-srun ./pi_omp_reduction 125000 2
-srun ./pi_omp_reduction 125000 12
-srun ./pi_omp_reduction 125000 22
-srun ./pi_omp_reduction 125000 32
-srun ./pi_omp_reduction 125000 42
-
-srun ./pi_omp_reduction 62500 2
-srun ./pi_omp_reduction 62500 12
-srun ./pi_omp_reduction 62500 22
-srun ./pi_omp_reduction 62500 32
-srun ./pi_omp_reduction 62500 42
+# Strong Scaling Analysis
+srun ./pi_omp_reduction 10000000 2
+srun ./pi_omp_reduction 10000000 7
+srun ./pi_omp_reduction 10000000 12
+srun ./pi_omp_reduction 10000000 17
+srun ./pi_omp_reduction 10000000 22
+srun ./pi_omp_reduction 10000000 27
+srun ./pi_omp_reduction 10000000 32
+srun ./pi_omp_reduction 10000000 37
+srun ./pi_omp_reduction 10000000 42
 
 # Remove the first four lines from the output file
-# It is important to make a proper make clean before running this file, otherwise there
-# will be deleted too many slides!
-tail -n +8 slurm_job_pi_reduction-${SLURM_JOB_ID}.out > slurm_job_pi_reduction.txt
+tail -n +8 slurm_job_pi_reduction-${SLURM_JOB_ID}.out > slurm_job_pi_reduction_strong.txt
