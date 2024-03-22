@@ -1,0 +1,126 @@
+Running the Sequential Program
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 1.964464e+00 
+Running the Sequential Program
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 3.224260e+00 
+Running the Sequential Program
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 5.726701e+00 
+Running the Sequential Program
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 1.074196e+01 
+Running the Sequential Program
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 2.236872e+01 
+Running the Sequential Program
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 4.631199e+01 
+Running with OMP_NUM_THREADS=1
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 1.745606e+00 
+Running with OMP_NUM_THREADS=2
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 1.201254e+00 
+Running with OMP_NUM_THREADS=4
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 6.321823e-01 
+Running with OMP_NUM_THREADS=8
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 4.848898e-01 
+Running with OMP_NUM_THREADS=16
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 7.421369e-01 
+Running with OMP_NUM_THREADS=32
+Problem Size = 10000000
+Size of dataset: 10000000, elapsed time[s] 9.590128e-01 
+Running with OMP_NUM_THREADS=1
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 2.877877e+00 
+Running with OMP_NUM_THREADS=2
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 1.937033e+00 
+Running with OMP_NUM_THREADS=4
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 1.382690e+00 
+Running with OMP_NUM_THREADS=8
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 9.329812e-01 
+Running with OMP_NUM_THREADS=16
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 1.159151e+00 
+Running with OMP_NUM_THREADS=32
+Problem Size = 20000000
+Size of dataset: 20000000, elapsed time[s] 1.858519e+00 
+Running with OMP_NUM_THREADS=1
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 5.542243e+00 
+Running with OMP_NUM_THREADS=2
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 3.742279e+00 
+Running with OMP_NUM_THREADS=4
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 2.550562e+00 
+Running with OMP_NUM_THREADS=8
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 1.538046e+00 
+Running with OMP_NUM_THREADS=16
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 1.721030e+00 
+Running with OMP_NUM_THREADS=32
+Problem Size = 40000000
+Size of dataset: 40000000, elapsed time[s] 3.186206e+00 
+Running with OMP_NUM_THREADS=1
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 1.155358e+01 
+Running with OMP_NUM_THREADS=2
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 6.683268e+00 
+Running with OMP_NUM_THREADS=4
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 4.438704e+00 
+Running with OMP_NUM_THREADS=8
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 3.967884e+00 
+Running with OMP_NUM_THREADS=16
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 3.645958e+00 
+Running with OMP_NUM_THREADS=32
+Problem Size = 80000000
+Size of dataset: 80000000, elapsed time[s] 5.972143e+00 
+Running with OMP_NUM_THREADS=1
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 2.425635e+01 
+Running with OMP_NUM_THREADS=2
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 1.297314e+01 
+Running with OMP_NUM_THREADS=4
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 8.261791e+00 
+Running with OMP_NUM_THREADS=8
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 6.008415e+00 
+Running with OMP_NUM_THREADS=16
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 6.590894e+00 
+Running with OMP_NUM_THREADS=32
+Problem Size = 160000000
+Size of dataset: 160000000, elapsed time[s] 9.855544e+00 
+Running with OMP_NUM_THREADS=1
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 7.222869e+01 
+Running with OMP_NUM_THREADS=2
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 3.066898e+01 
+Running with OMP_NUM_THREADS=4
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 1.695288e+01 
+Running with OMP_NUM_THREADS=8
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 1.147378e+01 
+Running with OMP_NUM_THREADS=16
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 1.162033e+01 
+Running with OMP_NUM_THREADS=32
+Problem Size = 320000000
+Size of dataset: 320000000, elapsed time[s] 1.764139e+01 

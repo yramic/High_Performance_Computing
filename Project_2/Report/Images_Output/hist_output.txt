@@ -1,0 +1,18 @@
+Sequential Program      OMP_NUM_THREADS=8       OMP_NUM_THREADS=32
+dist[0]=93              dist[0]=93              dist[0]=93
+dist[1]=3285            dist[1]=3285            dist[1]=3285
+dist[2]=85350           dist[2]=85350           dist[2]=85350
+dist[3]=1260714         dist[3]=1260714         dist[3]=1260714
+dist[4]=10871742        dist[4]=10871742        dist[4]=10871742
+dist[5]=54586161        dist[5]=54586161        dist[5]=54586161
+dist[6]=159818688       dist[6]=159818688       dist[6]=159818688
+dist[7]=273378694       dist[7]=273378694       dist[7]=273378694
+dist[8]=273376196       dist[8]=273376196       dist[8]=273376196
+dist[9]=159818440       dist[9]=159818440       dist[9]=159818440
+dist[10]=54574824       dist[10]=54574824       dist[10]=54574824
+dist[11]=10876078       dist[11]=10876078       dist[11]=10876078
+dist[12]=1261215        dist[12]=1261215        dist[12]=1261215
+dist[13]=85046          dist[13]=85046          dist[13]=85046
+dist[14]=3397           dist[14]=3397           dist[14]=3397
+dist[15]=77             dist[15]=77             dist[15]=77
+Time: 2.65926 sec       Time: 0.468622 sec      Time: 0.290979 sec

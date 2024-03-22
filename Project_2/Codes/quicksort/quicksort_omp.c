@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "walltime.h"
+#include <omp.h>
 
 void print_list(double *data, int length) {
   for (int i = 0; i < length; i++) {
@@ -39,8 +40,27 @@ void quicksort(double *data, int length) {
   // print_list(data, length);
 
   /* recursion */
+ 
+#pragma omp task firstprivate(data, right)
+{
   quicksort(data, right);
+}
+#pragma omp task firstprivate(data, length, left)
+{
   quicksort(&(data[left]), length - left);
+}
+
+// #pragma omp parallel sections
+// { 
+// #pragma omp section
+//   {
+//     quicksort(data, right);
+//   }
+// #pragma omp section
+//   {
+//     quicksort(&(data[left]), length - left);
+//   }
+// }
 }
 
 int check(double *data, int length) {
@@ -73,15 +93,12 @@ int main(int argc, char **argv) {
     data[i] = (double)rand() / (double)RAND_MAX;
   }
 
-  double time_start = walltime();
-  quicksort(data, length);
-  double time = walltime() - time_start;
+  // print_list(data, length);
 
-  // For some reason the following commented code is not working properly!
-
+  
   // print_list(data, length);
   // Do the experiment several times and then take the average!
-  // int n_exp = 10; // Number of experiments!
+  // int n_exp = 3; // Number of experiments!
   // // Allocate memory to store all Times!
   // double *times;
   // times = malloc(n_exp * sizeof (double));
@@ -89,7 +106,13 @@ int main(int argc, char **argv) {
   // for (int i = 0; i < (n_exp-1); i++) {
   //   // Start Algorithm here!
   //   double time_start = walltime();
-  //   quicksort(data, length);
+  //   #pragma omp parallel shared(data, length)
+  //   {
+  //   #pragma omp single nowait
+  //     {
+  //       quicksort(data, length);
+  //     }
+  //   }
   //   double time = walltime() - time_start;
 
   //   // Store the times!
@@ -102,7 +125,21 @@ int main(int argc, char **argv) {
   // avg_time /= n_exp;
   // print_list(data, length);
 
+  double time_start = walltime();
+  #pragma omp parallel shared(data, length)
+  {
+  #pragma omp single nowait
+    {
+      quicksort(data, length);
+    }
+  }
+  double time = walltime() - time_start;
+
+  // print_list(data, length);
+
   printf("Size of dataset: %d, elapsed time[s] %e \n", length, time);
+
+  // printf("Size of dataset: %d, elapsed time[s] %e \n", length, avg_time);
 
   if (check(data, length) != 0) printf("Quicksort incorrect.\n");
 

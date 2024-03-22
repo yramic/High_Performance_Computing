@@ -1,0 +1,17 @@
+# Critical Parallelization Version                  # Reduction Parallelization Version
+
+#pragma omp parallel                                omp_set_num_threads(threads);
+{                                                   #pragma omp parallel
+    double partial_sum = 0.;                        {
+    int nthreads = omp_get_num_threads();               #pragma omp for reduction(+:sum)
+    int tid = omp_get_thread_num();                         for (int i = 0; i < N; ++i) {
+    int i_beg = tid * N / nthreads;                             double x = (i + 0.5)*h;
+    int i_end = (tid + 1) * N / nthreads;                       sum += 4.0 / (1.0 + x*x);
+    for (int i = i_beg; i < i_end; ++i) {                   }
+    double x = (i + 0.5)*h;                         }
+    partial_sum += 4.0 / (1.0 + x*x);               pi = sum*h
+    }                                           
+    #pragma omp critical                        
+        sum += partial_sum;                     
+} // Parallelization ends here!                 
+pi = sum*h;                                     

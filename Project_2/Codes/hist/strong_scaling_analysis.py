@@ -44,4 +44,4 @@ plt.plot(threads[:], S_ideal[:], marker="x", label="ideal")
 plt.legend()
 plt.show()
 
-# plt.savefig('parallel_speedup.png')
+# plt.savefig('hist_speedup.png')

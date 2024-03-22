@@ -1,0 +1,35 @@
+Running the Sequential Program
+Sequential RunTime:  0.903069 seconds
+Final Result Sn   :  7.3890560830036707 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=1
+Parallel RunTime  :  0.913387 seconds
+Final Result Sn   :  7.3890560091131112 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=2
+Parallel RunTime  :  0.520727 seconds
+Final Result Sn   :  7.3890560091157873 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=4
+Parallel RunTime  :  0.300407 seconds
+Final Result Sn   :  7.3890560091184163 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=8
+Parallel RunTime  :  0.174071 seconds
+Final Result Sn   :  7.3890560091177599 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=16
+Parallel RunTime  :  0.088380 seconds
+Final Result Sn   :  7.3890560091169588 
+Result ||opt||^2_2 :  13.399537
+
+Running with OMP_NUM_THREADS=32
+Parallel RunTime  :  0.081424 seconds
+Final Result Sn   :  7.3890560091173505 
+Result ||opt||^2_2 :  13.399537
+

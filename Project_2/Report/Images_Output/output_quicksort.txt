@@ -1,0 +1,14 @@
+Running the Sequential Program
+Size of dataset: 10000000, elapsed time[s] 2.182783e+00 
+Running with OMP_NUM_THREADS=1
+Size of dataset: 10000000, elapsed time[s] 2.343903e+00 
+Running with OMP_NUM_THREADS=2
+Size of dataset: 10000000, elapsed time[s] 1.195091e+00 
+Running with OMP_NUM_THREADS=4
+Size of dataset: 10000000, elapsed time[s] 6.066376e-01 
+Running with OMP_NUM_THREADS=8
+Size of dataset: 10000000, elapsed time[s] 5.392190e-01 
+Running with OMP_NUM_THREADS=16
+Size of dataset: 10000000, elapsed time[s] 6.830470e-01 
+Running with OMP_NUM_THREADS=32
+Size of dataset: 10000000, elapsed time[s] 9.954015e-01 
