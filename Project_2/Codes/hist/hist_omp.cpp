@@ -34,17 +34,22 @@ int main() {
   }
 
   // TODO Parallelize the histogram computation
+  // Note c-style array, integer with stacksize BIN is created, not a pointer!
+  long dist_local[BINS];
+  for (int bin = 0; bin < BINS; ++bin) {
+    dist_local[bin] = 0;
+  }
 
   time_start = walltime();
   // TODO Parallelize the histogram computation
-  #pragma omp parallel shared(vec, dist)
+  #pragma omp parallel shared(vec, dist) firstprivate(dist_local)
   {
     // For some reason dist_local has to be defined inside the omp area
     // otherwise I will get racing issues and I end up having wrong results!
-    long dist_local[BINS];
-    for (int bin = 0; bin < BINS; ++bin) {
-      dist_local[bin] = 0;
-    }
+    // long dist_local[BINS];
+    // for (int bin = 0; bin < BINS; ++bin) {
+    //   dist_local[bin] = 0;
+    // }
 
   #pragma omp for
     for (long i = 0; i < VEC_SIZE; ++i) {

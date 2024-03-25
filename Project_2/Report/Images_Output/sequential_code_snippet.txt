@@ -1,4 +1,0 @@
-for (n = 0; n <= N; ++n) {
-    opt[n] = Sn;
-    Sn *= up;
-}

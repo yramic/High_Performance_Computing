@@ -1,0 +1,19 @@
+// Parallelized Code                                            // Sequential Code
+
+ #pragma omp parallel shared(vec, dist)                         for (long i = 0; i < VEC_SIZE; ++i) {
+  {                                                                 dist[vec[i]]++;
+    long dist_local[BINS];                                      }
+    for (int bin = 0; bin < BINS; ++bin) {
+      dist_local[bin] = 0;
+    }
+
+  #pragma omp for
+    for (long i = 0; i < VEC_SIZE; ++i) {
+      dist_local[vec[i]]++;
+    }
+    
+    for (int bin = 0; bin < BINS; ++bin) {
+  #pragma omp atomic
+      dist[bin] += dist_local[bin];
+    }
+  }
